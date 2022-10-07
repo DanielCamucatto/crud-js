@@ -9,12 +9,6 @@ const closeModal = () => {
     
 } 
 
-const tempClient = {
-    nome: "teste1",
-    email: "teste@testa.com",
-    celular: "11123459876",
-    cidade: "São Paulo"
-}
 
 //CRUD
 const getLocalStorage = () => JSON.parse(localStorage.getItem('db_client')) ?? [];
@@ -69,8 +63,9 @@ const saveClient = () => {
     }
 }
 
-const createRow = () => {
+const createRow = (client) => {
     const newRow = document.createElement('tr'); 
+
     newRow.innerHTML = `
         <td>${client.name}</td>
         <td>${client.email}</td>
