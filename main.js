@@ -59,11 +59,12 @@ const saveClient = () => {
         city: document.getElementById('city').value
        }
        createClient(client);
+       updateTable();
        closeModal();
     }
 }
 
-const createRow = (client) => {
+const createRow = (client, index) => {
     const newRow = document.createElement('tr'); 
 
     newRow.innerHTML = `
@@ -72,8 +73,8 @@ const createRow = (client) => {
         <td>${client.phone}</td>
         <td>${client.city}</td>
         <td>
-            <button type="button" class="button green">editar</button>
-            <button type="button" class="button red">excluir</button>
+            <button type="button" class="button green" data-action='edit-${index}' >editar</button>
+            <button type="button" class="button red" data-action='delete-${index}' >excluir</button>
         </td>
     `
     document.querySelector('#tableClient>tbody').appendChild(newRow)
@@ -82,6 +83,26 @@ const createRow = (client) => {
 const updateTable = () => {
     const db_client = readClient(); 
     db_client.forEach(createRow);
+}
+
+const fillFields = (client) => {
+    document.getElementById('name').value = client.name;
+    document.getElementById('email').value = client.email;
+    document.getElementById('phone').value = client.phone;
+    document.getElementById('city').value = client.city;
+}
+
+const editClient = (index) => {
+    const client = readClient()[index]; 
+    fillFields(client);
+    openModal()
+}
+
+const editDelete = (ev) => {
+    if(ev.target.type === 'button'){
+        const [action, index] = ev.target.dataset.action.split('-');
+        action === 'edit' ? editClient(index) : console.log('deletando cliente');;
+    }
 }
 
 updateTable()
@@ -93,4 +114,5 @@ document.getElementById('cadastrarCliente')
 document.getElementById('modalClose')
     .addEventListener('click', closeModal);
 
-document.getElementById('save').addEventListener('click', saveClient)
+document.getElementById('save').addEventListener('click', saveClient); 
+document.querySelector('#tableClient>tbody').addEventListener('click', editDelete);
